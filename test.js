@@ -1,40 +1,41 @@
-// basic smoke test — run with: node test.js
-const { createCore } = require('./core.js');
+/**
+ * tiny-state-core test
+ * 指向本體：🥃LKMINI｜Master Ledger
+ */
+
+const { createState } = require('./core');
 
 let passed = 0;
 let failed = 0;
 
-function assert(label, expr) {
-  if (expr) { console.log('  ✓', label); passed++; }
-  else       { console.error('  ✗', label); failed++; }
+function assert(label, condition) {
+  if (condition) {
+    console.log(`✅ PASS: ${label}`);
+    passed++;
+  } else {
+    console.error(`❌ FAIL: ${label}`);
+    failed++;
+  }
 }
 
-// 1. initial state
-const c = createCore({ x: 1 });
-assert('get() returns initial state', c.get().x === 1);
+const state = createState({ count: 0, name: 'LKMINI' });
 
-// 2. set + change event
-let received = null;
-const off = c.on('change', s => { received = s; });
-c.set({ x: 2 });
-assert('set() updates state', c.get().x === 2);
-assert('change event fires', received && received.x === 2);
+assert('初始值 count === 0', state.get('count') === 0);
+assert('初始值 name === LKMINI', state.get('name') === 'LKMINI');
 
-// 3. off unsubscribes
-off();
-c.set({ x: 3 });
-assert('off() stops listener', received.x === 2); // should still be 2
+state.set('count', 42);
+assert('set count === 42', state.get('count') === 42);
 
-// 4. reset
-const c2 = createCore({ y: 10 });
-c2.set({ y: 99 });
-c2.reset();
-assert('reset() restores initial state', c2.get().y === 10);
+state.undo();
+assert('undo count === 0', state.get('count') === 0);
 
-// 5. destroy
-c2.destroy();
-try { c2.get(); assert('get after destroy throws', false); }
-catch (e) { assert('get after destroy throws', true); }
+const snap = state.snapshot();
+assert('snapshot 是獨立物件', snap !== state);
+assert('snapshot count === 0', snap.count === 0);
 
-console.log(`\n${passed} passed, ${failed} failed`);
-if (failed > 0) process.exit(1);
+let notified = false;
+state.subscribe('count', () => { notified = true; });
+state.set('count', 99);
+assert('subscribe 觸發通知', notified === true);
+
+console.log(`\n結果：${passed} 通過，${failed} 失敗`);

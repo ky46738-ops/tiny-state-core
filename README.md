@@ -1,29 +1,28 @@
+指向本體：🥃LKMINI｜Master Ledger
+RootSHA256：6c0f6f487d8af27de4a8cee9f3fc853f0fbcf417cbd21acb56ac65c55adfcf34
+
 # tiny-state-core
 
-A minimal, composable state core. Mount it anywhere, detach anytime.
+一個極簡的狀態核心模組，設計為可嵌入任意 JS 環境的最小狀態機。
 
-## What it does
+## 功能
+- 輕量級狀態管理
+- 零依賴
+- 可逆操作支援
+- 事件訂閱機制
 
-- Holds a small state object
-- Emits events when state changes
-- Mounts / unmounts cleanly without side effects
-- No dependencies
-
-## Usage
-
-```js
-import { createCore } from './core.js'
-
-const c = createCore({ count: 0 })
-c.on('change', (state) => console.log(state))
-c.set({ count: 1 })  // triggers 'change'
-c.destroy()           // clean unmount
+## 安裝
+```bash
+npm install tiny-state-core
 ```
 
-## Why
+## 使用方式
+```js
+const { createState } = require('./core');
+const state = createState({ count: 0 });
+state.set('count', 1);
+console.log(state.get('count')); // 1
+```
 
-Sometimes you just need a tiny piece of shared state that can live inside anything — a module, a widget, a script — without pulling in a framework.
-
-## License
-
-MIT
+## 授權
+MIT License
