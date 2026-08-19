@@ -1,2 +1,9 @@
-# tiny-state-core
-A minimal composable state core. Mount it anywhere, detach anytime.
+# 🧠｜小型狀態核心說明｜TinyStateCore
+
+這是一個最小、可組合的狀態核心概念。
+
+- 可以掛載在不同位置
+- 可以隨時拆離
+- 目標是用最小結構保存狀態關係
+
+目前這個個人帳戶公開位置只包含本說明檔，沒有把說明文字冒充成完整程式實作。
