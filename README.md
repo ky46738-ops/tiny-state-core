@@ -1,9 +1,29 @@
-# 🧠｜小型狀態核心說明｜TinyStateCore
+# tiny-state-core
 
-這是一個最小、可組合的狀態核心概念。
+A minimal, composable state core. Mount it anywhere, detach anytime.
 
-- 可以掛載在不同位置
-- 可以隨時拆離
-- 目標是用最小結構保存狀態關係
+## What it does
 
-目前這個個人帳戶公開位置只包含本說明檔，沒有把說明文字冒充成完整程式實作。
+- Holds a small state object
+- Emits events when state changes
+- Mounts / unmounts cleanly without side effects
+- No dependencies
+
+## Usage
+
+```js
+import { createCore } from './core.js'
+
+const c = createCore({ count: 0 })
+c.on('change', (state) => console.log(state))
+c.set({ count: 1 })  // triggers 'change'
+c.destroy()           // clean unmount
+```
+
+## Why
+
+Sometimes you just need a tiny piece of shared state that can live inside anything — a module, a widget, a script — without pulling in a framework.
+
+## License
+
+MIT
